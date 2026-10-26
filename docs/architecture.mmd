@@ -1,0 +1,21 @@
+flowchart TD
+  subgraph existing["IMPLEMENTED FOUNDATION"]
+    config["Two Config definitions"]
+    logger["JSON logger and optional Loki handler"]
+  end
+  subgraph proposed["PROPOSED INGESTION FLOW"]
+    source["Complete CSV extract"] --> collector["Python collector"]
+    collector -->|immutable objects| landing["S3 landing"]
+    collector -->|publish last| manifest["Ready manifest"]
+    manifest --> worker["Python load worker"]
+    landing --> stage["Snowflake stage"]
+    worker -->|COPY and reconcile| raw["Managed Iceberg tables"]
+    stage -->|FULL_INGEST| raw
+    raw -->|Snowflake writes| volume["S3 external volume"]
+    worker --> audit["Native audit and release state"]
+    raw --> views["Published current views"]
+    audit --> views
+  end
+  config -.->|consolidate and integrate| collector
+  config -.->|consolidate and integrate| worker
+  worker -.->|wire after fixes| logger

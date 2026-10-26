@@ -1,0 +1,74 @@
+{
+  "reviewed_commit": "b2d330e0bc4b5bdb46201e818515384bac2b6f74",
+  "python": "3.12.14",
+  "check_count": 9,
+  "cloud_calls": 0,
+  "meaning": "Observed baseline behavior; not end-to-end ingestion tests",
+  "checks": [
+    {
+      "check": "main_valid_config_returns_without_ingestion",
+      "observed": {
+        "stdout": "",
+        "logger_imported": false,
+        "aws_sdk_imported": false,
+        "snowflake_sdk_imported": false
+      }
+    },
+    {
+      "check": "main_rejects_missing_configuration",
+      "observed": {
+        "missing_local_dir_reported": true
+      }
+    },
+    {
+      "check": "configuration_sources_disagree",
+      "observed": {
+        "main_uses_override": true,
+        "shared_config_uses_override": false
+      }
+    },
+    {
+      "check": "preconfigured_root_suppresses_loki",
+      "observed": {
+        "loki_handlers_created": 0
+      }
+    },
+    {
+      "check": "clean_root_initializes_loki_and_json_console",
+      "observed": {
+        "loki_handlers_created": 1,
+        "structured_console_record": true
+      }
+    },
+    {
+      "check": "loki_dependency_posts_synchronously_without_timeout",
+      "observed": {
+        "timeout_present": false,
+        "same_thread": true,
+        "keyword_arguments": [
+          "json"
+        ]
+      }
+    },
+    {
+      "check": "logging_import_depends_on_full_data_configuration",
+      "observed": {
+        "logger_requires_snowflake_credentials": true
+      }
+    },
+    {
+      "check": "loki_environment_label_is_hardcoded",
+      "observed": {
+        "requested_environment": "development",
+        "loki_environment_label": "production"
+      }
+    },
+    {
+      "check": "dependency_filename_has_double_extension",
+      "observed": {
+        "requirements_txt_exists": false,
+        "requirements_txt_txt_exists": true
+      }
+    }
+  ]
+}
